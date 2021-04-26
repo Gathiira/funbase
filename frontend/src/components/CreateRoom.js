@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import FormControl from '@material-ui/core/FormControl';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import Radio from '@material-ui/core/Radio';
 import RadionGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -13,6 +13,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel'
 
 function CreateRoom() {
     const defaultVotes = 2;
+    let history = useHistory();
+
     const [guestCanPause, setGuestCanPause] = useState(true);
     const [votesToSkip, setVotesToSkip] = useState(defaultVotes)
 
@@ -42,7 +44,7 @@ function CreateRoom() {
 
         fetch('/api/create-room', requestOptions)
         .then((response) => response.json())
-        .then((data) => console.log(data))
+        .then((data) => history.push(`/room/${data.code}`))
     }
 
     return (
