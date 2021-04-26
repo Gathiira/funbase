@@ -28,8 +28,21 @@ function CreateRoom() {
     }
 
     const handleCreateRoom = () =>{
-        console.log('pause ',guestCanPause)
-        console.log('votes  ',votesToSkip)
+        const requestOptions = {
+            method : "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json; charset=utf-8'
+            },
+            body: JSON.stringify({
+                votes_to_skip:votesToSkip,
+                guest_can_pause:guestCanPause,
+            })
+        }
+
+        fetch('/api/create-room', requestOptions)
+        .then((response) => response.json())
+        .then((data) => console.log(data))
     }
 
     return (
