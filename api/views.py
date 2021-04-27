@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 
 from .models import Room
-from .serializers import RoomSerializer, CreateRoomSerializer
+from .serializers import RoomSerializer, CreateRoomSerializer, UpdateRoomSerializer
 
 
 class RoomViewSet(generics.ListAPIView):
@@ -116,3 +116,36 @@ class LeaveRoomView(APIView):
         return Response({
             "details": " success"
         }, status=status.HTTP_200_OK)
+
+
+class UpdateRoomView(APIView):
+    serializer_class = UpdateRoomSerializer
+
+    def patch(self, request, format=None):
+        serializer = self.serializer_class(data=request.data)
+
+        if serializer.is_valid():
+            guest_can_pause = serializer.data.get('guest_can_pause')
+            votes_to_skip = serializer.data.get('votes_to_skip')
+            code = serializer.data.get('code')
+
+            queryset = Room.objects.filter(code=code)
+            if not queryset.exists():
+                return Response({
+                    "details": "room not found"
+                }, status=status.HTTP_400_NOT_FOUND)
+            room = queryset.first()
+
+            user_id = self.request.session.session_key
+            if room.host != user_id:
+                return Response({
+                    "details": "you are not the owner of the room"
+                }, status=status.HTTP_403_FORBIDDEN)
+            room.guest_can_pause = guest_can_pause
+            room.votes_to_skip = votes_to_skip
+            room.save(update_fields=['guest_can_pause', 'votes_to_skip'])
+
+            return Response(RoomSerializer(room).data, status=status.HTTP_200_OK)
+        return Response({
+            "details": "invalid data"
+        }, status=status.HTTP_400_BAD_REQUEST)
