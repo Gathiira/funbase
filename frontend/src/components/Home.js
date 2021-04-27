@@ -43,11 +43,24 @@ function Home() {
         getUserRoomDetails()
     }, [])
 
+
+    const clearRoom = () =>{
+        setRoomCode(null)
+    }
+
     return (
         <Router>
             <div className="home">
                 <Switch>
-                    <Route path='/room/:roomCode' component={Room} />
+                    <Route path='/room/:roomCode'
+                    render={
+                        (props) => {
+                            return <Room {...props} leaveRoomCallback = {clearRoom} />
+                        }
+                    }
+                    />
+
+
                     <Route path='/join'>
                         <JoinRoom />
                     </Route>
