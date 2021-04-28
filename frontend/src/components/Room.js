@@ -1,17 +1,34 @@
 import { Button, Grid, Typography } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import CreateRoom from './CreateRoom';
-
 
 function Room(props) {
     const [votesToSkip, setVotesToSkip] = useState(2)
     const [guestCanPause, setGuestCanPause] = useState(false)
-    const [isHost, setIsHost] = useState(false)
     const [showSettings, setShowSettings] = useState(false)
+    const [spotifyAuth, setSpotifyAuth] = useState(false)
+
+    const isHost = useRef(false)
 
     const {roomCode} = props.match.params;
     const history = useHistory()
+
+
+    const isAuthenticated = () => {
+        fetch('/spotify/authenticated')
+        .then((response)=> response.json())
+        .then((data)=> {
+            setSpotifyAuth(data.details)
+            if (!data.details) {
+                fetch('/spotify/get-auth-url')
+                .then((response)=> response.json())
+                .then((data)=> {
+                    window.location.replace(data.url);
+                })
+            }
+        })
+    }
 
     const getRoomDetails = () =>{
         fetch(`/api/get-room?code=${roomCode}`)
@@ -25,14 +42,16 @@ function Room(props) {
         .then((data) => {
             setVotesToSkip(data.votes_to_skip)
             setGuestCanPause(data.guest_can_pause)
-            setIsHost(data.is_host)
+            isHost.current = data.is_host
+            if (isHost.current) {
+                isAuthenticated()
+            }
         })
+        
     }
-
     useEffect(() => {
-        getRoomDetails()
-    }, [])
-
+        getRoomDetails();
+    }, []);
 
     const leaveRoom = () =>{
         const requestOptions = {
@@ -106,10 +125,10 @@ function Room(props) {
             </Grid>
             <Grid item xs={12} align="center">
                 <Typography variant="h6" component="h6">
-                    Host: {isHost?.toString()}
+                    Host: {isHost.current?.toString()}
                 </Typography>
             </Grid>
-            {isHost ? renderSettingsButton() : null}
+            {isHost.current ? renderSettingsButton() : null}
             <Grid item xs={12} align="center">
                 <Button variant="contained" color="secondary" onClick={leaveRoom}>
                     Leave Room
