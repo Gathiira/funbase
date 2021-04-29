@@ -5,6 +5,7 @@ import {BrowserRouter as Router, Switch, Route, Link, Redirect} from 'react-rout
 import CreateRoom from './CreateRoom';
 import JoinRoom from './JoinRoom';
 import Room from './Room';
+import Info from './Info'
 
 function Home() {
     const [roomCode, setRoomCode] = useState(null)
@@ -21,6 +22,9 @@ function Home() {
                     <ButtonGroup disableElevation variant="contained" color="primary">
                         <Button color="primary" to='/join' component={Link}>
                             Join a Room
+                        </Button>
+                        <Button color="default" to='/info' component={Link}>
+                            Info
                         </Button>
                         <Button color="secondary" to='/create' component={Link}>
                             Create a Room
@@ -59,10 +63,11 @@ function Home() {
                         }
                     }
                     />
-
-
                     <Route path='/join'>
                         <JoinRoom />
+                    </Route>
+                    <Route path='/info'>
+                        <Info />
                     </Route>
                     <Route path='/create'>
                         <CreateRoom />

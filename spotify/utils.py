@@ -82,14 +82,14 @@ def execute_api_request(session_id, endpoint, post_=False, put_=False):
     if post_:
         post(url, headers=headers)
     if put_:
-        response = put(url, headers=headers)
-    else:
-        response = get(url, {}, headers=headers)
+        put(url, headers=headers)
 
-        try:
-            return response.json()
-        except:
-            return {"error": "Issue with request"}
+    # url = BASE_URL + 'player/currently-playing'
+    response = get(url, {}, headers=headers)
+    try:
+        return response.json()
+    except:
+        return {"error": "Issue with request"}
 
 
 def play_song(session_id):
@@ -98,3 +98,7 @@ def play_song(session_id):
 
 def pause_song(session_id):
     return execute_api_request(session_id, "player/pause", put_=True)
+
+
+def skip_song(session_id):
+    return execute_api_request(session_id, "player/next", post_=True)

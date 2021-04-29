@@ -7,7 +7,7 @@ import PauseIcon from '@material-ui/icons/Pause';
 
 
 function Player(props) {
-    var {image_url, title, artist,is_playing, duration, progress } = props
+    var {image_url, title, artist,is_playing, duration, progress, votes, votes_required } = props
 
     var songprogress = (progress/ duration) * 100;
 
@@ -29,6 +29,14 @@ function Player(props) {
         fetch("/spotify/pause", requestOptions)    
     }
 
+    const skipSong = () =>{
+        const requestOptions = {
+            method:"POST",
+            headers: {"Content-Type":"application/json"}
+        }
+        fetch("/spotify/skip", requestOptions)    
+    }
+
     return (
         <Card>
             <Grid container>
@@ -46,8 +54,8 @@ function Player(props) {
                         <IconButton onClick={() => {is_playing? pauseSong(): playSong()}}>
                             {is_playing ? <PauseIcon /> : <PlayArrowIcon />}
                         </IconButton>
-                        <IconButton>
-                            <SkipNextIcon />
+                        <IconButton onClick={()=> skipSong()}>
+                            <SkipNextIcon /> {votes_required>1 ? <>{votes}/{votes_required}</>:null} 
                         </IconButton>
                     </div>
                 </Grid>
