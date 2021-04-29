@@ -90,3 +90,11 @@ def execute_api_request(session_id, endpoint, post_=False, put_=False):
         return response.json()
     except:
         return {"error": "Issue with request"}
+
+
+def play_song(session_id):
+    return execute_api_request(session_id, "player/play", put_=True)
+
+
+def pause_song(session_id):
+    return execute_api_request(session_id, "player/pause", put_=True)

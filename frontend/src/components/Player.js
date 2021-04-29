@@ -11,6 +11,24 @@ function Player(props) {
 
     var songprogress = (progress/ duration) * 100;
 
+
+    const playSong = () =>{
+        const requestOptions = {
+            method:"PUT",
+            headers: {"Content-Type":"application/json"}
+        }
+        fetch("/spotify/play", requestOptions)
+
+    }
+
+    const pauseSong = () =>{
+        const requestOptions = {
+            method:"PUT",
+            headers: {"Content-Type":"application/json"}
+        }
+        fetch("/spotify/pause", requestOptions)    
+    }
+
     return (
         <Card>
             <Grid container alighItems="center">
@@ -25,8 +43,8 @@ function Player(props) {
                         {artist}
                     </Typography>
                     <div>
-                        <IconButton>
-                            {is_playing ? <PauseIcon/> : <PlayArrowIcon/>}
+                        <IconButton onClick={() => {is_playing? pauseSong(): playSong()}}>
+                            {is_playing ? <PauseIcon /> : <PlayArrowIcon />}
                         </IconButton>
                         <IconButton>
                             <SkipNextIcon />

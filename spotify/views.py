@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from requests import Request, post
 from musicplayer.settings import CLIENT_ID, CLIENT_SECRET, REDIRECT_URI
-from .utils import execute_api_request, update_or_create_user_token, isAuthenticated
+from .utils import execute_api_request, pause_song, play_song, update_or_create_user_token, isAuthenticated
 
 from api.models import Room
 
@@ -109,3 +109,27 @@ class CurrentSong(APIView):
         }
 
         return Response(song, status=status.HTTP_200_OK)
+
+
+class PauseSong(APIView):
+    def put(self, request, format=None):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code).first()
+        if self.request.session.session_key == room.host:
+            print(room.host)
+            response = pause_song(room.host)
+            print(response)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+        return Response({}, status=status.HTTP_403_FORBIDDEN)
+
+
+class PlaySong(APIView):
+    def put(self, request, format=None):
+        room_code = self.request.session.get('room_code')
+        room = Room.objects.filter(code=room_code).first()
+        if self.request.session.session_key == room.host:
+            print(room.host)
+            response = play_song(room.host)
+            print(response)
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+        return Response({}, status=status.HTTP_403_FORBIDDED)

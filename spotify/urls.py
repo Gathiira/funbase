@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import AuthURl, spotify_callback, IsAuthenticated, CurrentSong
+from .views import (AuthURl, spotify_callback,
+                    IsAuthenticated, CurrentSong, PlaySong, PauseSong)
 
 
 urlpatterns = [
@@ -7,4 +8,6 @@ urlpatterns = [
     path('redirect', spotify_callback),
     path('authenticated', IsAuthenticated.as_view()),
     path('current-song', CurrentSong.as_view()),
+    path('play', PlaySong.as_view()),
+    path('pause', PauseSong.as_view()),
 ]
