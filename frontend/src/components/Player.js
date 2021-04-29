@@ -31,7 +31,7 @@ function Player(props) {
 
     return (
         <Card>
-            <Grid container alighItems="center">
+            <Grid container>
                 <Grid item align="center" xs={4}>
                     <img src={image_url} height="100%" width="100%" alt ="image" />                
                 </Grid>

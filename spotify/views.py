@@ -116,10 +116,8 @@ class PauseSong(APIView):
         room_code = self.request.session.get('room_code')
         room = Room.objects.filter(code=room_code).first()
         if self.request.session.session_key == room.host:
-            print(room.host)
             response = pause_song(room.host)
-            print(response)
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
+            return Response(response, status=status.HTTP_204_NO_CONTENT)
         return Response({}, status=status.HTTP_403_FORBIDDEN)
 
 
@@ -128,8 +126,6 @@ class PlaySong(APIView):
         room_code = self.request.session.get('room_code')
         room = Room.objects.filter(code=room_code).first()
         if self.request.session.session_key == room.host:
-            print(room.host)
             response = play_song(room.host)
-            print(response)
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
+            return Response(response, status=status.HTTP_204_NO_CONTENT)
         return Response({}, status=status.HTTP_403_FORBIDDED)
