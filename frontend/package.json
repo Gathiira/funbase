@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "cd frontend/src && node index.js",
     "dev": "webpack --mode development --watch",
     "build": "webpack --mode production"
   },
