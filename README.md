@@ -1,8 +1,8 @@
 # funbase
 
 ### start
-clone the repo 
-cd to project/
+- clone the repo <https://github.com/Gathiira/funbase.git>
+- cd to funbase/
 
 ### deployment
 - touch .env
